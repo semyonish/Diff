@@ -158,9 +158,31 @@ int main(int argc, const char * argv[])
                 modifyingIntervalStarted = false;
                 newFragment.clear();
             }
-           std::cout << "COMMON " << base[curPoint.i-1] << std::endl;
+        //    std::cout << "COMMON " << base[curPoint.i-1] << std::endl;
         }
-        else
+        else if (curPoint.i == prevPoint.i + 1 && curPoint.j == prevPoint.j + 1
+                && base[curPoint.i-1] != upd[curPoint.j-1])
+        {
+            if (!modifyingIntervalStarted)
+            {
+                modifyingIntervalStarted = true;
+                startModifyingInterval = curPoint.i-1;
+            }
+            // std::cout << "CHANGE " << base[curPoint.i-1] << "->" << upd[curPoint.j-1] << std::endl;
+            endModifyingInterval = curPoint.i;
+            newFragment.push_back(upd[curPoint.j-1]);
+        }
+        else if (curPoint.i == prevPoint.i + 1)
+        {
+            if (!modifyingIntervalStarted)
+            {
+                modifyingIntervalStarted = true;
+                startModifyingInterval = curPoint.i-1;
+            }
+            // std::cout << "DELETE " << base[curPoint.i-1] << std::endl;
+            endModifyingInterval = curPoint.i;
+        }
+        else if (curPoint.j == prevPoint.j + 1)
         {
             if (!modifyingIntervalStarted)
             {
@@ -168,23 +190,8 @@ int main(int argc, const char * argv[])
                 startModifyingInterval = curPoint.i;
                 endModifyingInterval = startModifyingInterval;
             }
-            if (curPoint.i == prevPoint.i + 1 && curPoint.j == prevPoint.j + 1
-                     && base[curPoint.i-1] != upd[curPoint.j-1])
-            {
-                std::cout << "CHANGE " << base[curPoint.i-1] << "->" << upd[curPoint.j-1] << std::endl;
-                endModifyingInterval = curPoint.i;
-                newFragment.push_back(upd[curPoint.j-1]);
-            }
-            else if (curPoint.i == prevPoint.i + 1)
-            {
-                std::cout << "DELETE " << base[curPoint.i-1] << std::endl;
-                endModifyingInterval = curPoint.i - 1;
-            }
-            else if (curPoint.j == prevPoint.j + 1)
-            {
-                std::cout << "ADD " << upd[curPoint.j-1] << std::endl;
-                newFragment.push_back(upd[curPoint.j-1]);
-            }
+            // std::cout << "ADD " << upd[curPoint.j-1] << std::endl;
+            newFragment.push_back(upd[curPoint.j-1]);
         }
     }
 
